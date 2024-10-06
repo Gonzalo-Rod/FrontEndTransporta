@@ -1,8 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function LoginScreen() {
+export default function LoginScreen(props) {
+  
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+  const logIn = async() => {
+    try {
+      props.navigation.navigate('Main')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bienvenido a <Text style={{ color: '#6B9AC4' }}>Transporta</Text> </Text>
@@ -13,15 +25,17 @@ export default function LoginScreen() {
         placeholder="nombre@email.com"
         keyboardType="email-address"
         autoCapitalize="none"
+        onChangeText={(text)=>setEmail(text)}
       />
       
       <TextInput
         style={styles.input}
         placeholder="contraseña"
         secureTextEntry
+        onChangeText={(text)=>setPassword(text)}
       />
       
-      <TouchableOpacity style={styles.continueButton}>
+      <TouchableOpacity style={styles.continueButton} onPress={logIn}>
         <Text style={styles.continueText}>Continuar</Text>
       </TouchableOpacity>
       

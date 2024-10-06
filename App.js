@@ -3,17 +3,24 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-na
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/login';
-import MapScreen from './screens/mapscreen';
-
-const Stack = createNativeStackNavigator();
+import BottomTab from './components/Navigation/BottomTab';
 
 export default function App() {
+
+  const Stack = createNativeStackNavigator();
+
+  function MyStack() {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Main" component={BottomTab} />
+      </Stack.Navigator>
+    )
+  }
+
   return (
     <NavigationContainer>
-       <Stack.Navigator screenOptions={{ headerShown: false }}>
-       <Stack.Screen name="Login" component={Login} />
-       <Stack.Screen name="MapScreen" component={MapScreen} />
-       </Stack.Navigator>
+       <MyStack />
     </NavigationContainer>
   );
 }
