@@ -1,13 +1,16 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Card = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.cardContainer}>
       <Text style={styles.title}>Hola Usuario!</Text>
       <Text style={styles.subtitle}>Qué quieres hacer?</Text>
 
-      <TouchableOpacity style={styles.cardButton}>
+      <TouchableOpacity style={styles.cardButton} onPress={() => navigation.navigate('Route')}>
         <Image source={require('../../assets/Busca.png')} style={styles.icon} />
         <View style={styles.textContainer}>
           <Text style={styles.buttonTitle}>Búsqueda Inmediata</Text>
@@ -15,7 +18,7 @@ const Card = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.cardButton}>
+      <TouchableOpacity style={styles.cardButton} >
         <Image source={require('../../assets/Reserva.png')} style={styles.icon} />
         <View style={styles.textContainer}>
           <Text style={styles.buttonTitle}>Reserva</Text>
@@ -39,8 +42,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     height: 450,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.2,

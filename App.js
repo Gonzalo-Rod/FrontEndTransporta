@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/login';
 import BottomTab from './components/Navigation/BottomTab';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Route from './screens/route';
 
 export default function App() {
 
@@ -15,6 +16,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Main" component={BottomTab} />
+      <Stack.Screen name="Route" component={Route} />
       </Stack.Navigator>
     )
   }
