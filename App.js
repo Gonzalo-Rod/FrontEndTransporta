@@ -6,6 +6,10 @@ import Login from './screens/login';
 import BottomTab from './components/Navigation/BottomTab';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Route from './screens/route';
+import DriversList from './screens/drivers';
+import DriverProfile from './screens/driverProfile';
+import AdvReservation from './screens/advReservation';
+import AdvConfirmation from './screens/advConfirmation';
 
 export default function App() {
 
@@ -17,6 +21,10 @@ export default function App() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Main" component={BottomTab} />
       <Stack.Screen name="Route" component={Route} />
+      <Stack.Screen name="Drivers" component={DriversList} />
+      <Stack.Screen name="DriverProfile" component={DriverProfile} />
+      <Stack.Screen name="AdvReservation" component={AdvReservation} />
+      <Stack.Screen name="AdvConfirmation" component={AdvConfirmation} />
       </Stack.Navigator>
     )
   }

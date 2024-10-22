@@ -26,7 +26,7 @@ const Card = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.cardButton}>
+      <TouchableOpacity style={styles.cardButton} onPress={() => navigation.navigate('Contact')}>
         <Image source={require('../../assets/Contacta.png')} style={styles.icon} />
         <View style={styles.textContainer}>
           <Text style={styles.buttonTitle}>Contacta</Text>
