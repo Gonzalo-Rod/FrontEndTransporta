@@ -18,7 +18,7 @@ const Card = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.cardButton} >
+      <TouchableOpacity style={styles.cardButton} onPress={() => navigation.navigate('Reservations')} >
         <Image source={require('../../assets/Reserva.png')} style={styles.icon} />
         <View style={styles.textContainer}>
           <Text style={styles.buttonTitle}>Reserva</Text>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginVertical: 10,
-    flexDirection: 'row', // Changed to row to place image and text side by side
+    flexDirection: 'row', 
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -74,13 +74,13 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   icon: {
-    width: 60, // Width of the icon (adjust as needed)
-    height: 60, // Height of the icon (adjust as needed)
-    marginRight: 15, // Space between the image and text
+    width: 60,
+    height: 60, 
+    marginRight: 15, 
   },
   textContainer: {
     flexDirection: 'column',
-    flexShrink: 1, // Ensures text wraps within the button
+    flexShrink: 1, 
   },
   buttonTitle: {
     fontSize: 16,

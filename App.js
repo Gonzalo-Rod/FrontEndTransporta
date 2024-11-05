@@ -10,6 +10,11 @@ import DriversList from './screens/drivers';
 import DriverProfile from './screens/driverProfile';
 import AdvReservation from './screens/advReservation';
 import AdvConfirmation from './screens/advConfirmation';
+import UserProfile from './screens/profile';
+import PaymentInfo from './screens/payment';
+import Activity from './screens/actividad';
+import Reservations from './screens/reservation';
+import ReservationRoute from './screens/rsvRoute';
 
 export default function App() {
 
@@ -25,6 +30,11 @@ export default function App() {
       <Stack.Screen name="DriverProfile" component={DriverProfile} />
       <Stack.Screen name="AdvReservation" component={AdvReservation} />
       <Stack.Screen name="AdvConfirmation" component={AdvConfirmation} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="PaymentInfo" component={PaymentInfo} />
+      <Stack.Screen name="Activity" component={Activity} />
+      <Stack.Screen name="Reservations" component={Reservations} />
+      <Stack.Screen name="ReservationRoute" component={ReservationRoute} />
       </Stack.Navigator>
     )
   }
