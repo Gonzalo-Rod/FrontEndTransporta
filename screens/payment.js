@@ -61,7 +61,7 @@ const PaymentInfo = ({ navigation }) => {
           <View key={method.id}>{renderPaymentMethod({ item: method })}</View>
         ))}
 
-        <TouchableOpacity style={[styles.paymentMethodContainer, styles.addPaymentButton]}>
+        <TouchableOpacity style={[styles.paymentMethodContainer, styles.addPaymentButton]} onPress={() => navigation.navigate('AddCreditCard')}>
           <Ionicons name="add" size={28} color="#6B9AC4" style={styles.add}/>
           <Text style={styles.addPaymentText}>Agregar Metodo de Pago</Text>
         </TouchableOpacity>

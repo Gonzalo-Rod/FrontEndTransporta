@@ -12,6 +12,7 @@ import AdvReservation from './screens/advReservation';
 import AdvConfirmation from './screens/advConfirmation';
 import UserProfile from './screens/profile';
 import PaymentInfo from './screens/payment';
+import AddCreditCard from './screens/addCard';
 import Activity from './screens/actividad';
 import Reservations from './screens/reservation';
 import ReservationRoute from './screens/rsvRoute';
@@ -32,6 +33,7 @@ export default function App() {
       <Stack.Screen name="AdvConfirmation" component={AdvConfirmation} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="PaymentInfo" component={PaymentInfo} />
+      <Stack.Screen name="AddCreditCard" component={AddCreditCard} />
       <Stack.Screen name="Activity" component={Activity} />
       <Stack.Screen name="Reservations" component={Reservations} />
       <Stack.Screen name="ReservationRoute" component={ReservationRoute} />

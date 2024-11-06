@@ -58,7 +58,7 @@ const UserProfile = ({ navigation }) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.logoutText}>Cerrar sesión</Text>
       </TouchableOpacity>
     </SafeAreaView>
