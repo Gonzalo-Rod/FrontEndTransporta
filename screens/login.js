@@ -29,9 +29,9 @@ export default function LoginScreen(props) {
       };
 
       const response = await axios.post(url_register, data, { headers });
+      const verify = JSON.parse(response.data.body).token
 
-      if (response.data) {
-        console.log(response)
+      if (verify) {
         props.navigation.navigate("Main");
       } else {
         setErrorMessage("Correo o contraseña incorrectos");
