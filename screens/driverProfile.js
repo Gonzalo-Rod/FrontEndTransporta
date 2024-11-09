@@ -6,6 +6,8 @@ const { width } = Dimensions.get('window');
 
 const DriverProfile = ({ navigation, route }) => {
   const { driver } = route.params;
+  const driverName = driver.name;
+  console.log(driverName)
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.headerContainer}>
@@ -27,10 +29,10 @@ const DriverProfile = ({ navigation, route }) => {
       </View>
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Chat', { driverName })}>
           <Ionicons name="chatbox" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Contacto</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdvReservation')}>
           <Ionicons name="calendar" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Reservar</Text>

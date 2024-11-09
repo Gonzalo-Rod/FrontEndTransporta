@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Route from './screens/route';
 import DriversList from './screens/drivers';
 import DriverProfile from './screens/driverProfile';
+import Chat from './screens/driverChat';
 import AdvReservation from './screens/advReservation';
 import AdvConfirmation from './screens/advConfirmation';
 import UserProfile from './screens/profile';
@@ -35,6 +36,7 @@ export default function App() {
       <Stack.Screen name="PaymentInfo" component={PaymentInfo} />
       <Stack.Screen name="AddCreditCard" component={AddCreditCard} />
       <Stack.Screen name="Activity" component={Activity} />
+      <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="Reservations" component={Reservations} />
       <Stack.Screen name="ReservationRoute" component={ReservationRoute} />
       </Stack.Navigator>

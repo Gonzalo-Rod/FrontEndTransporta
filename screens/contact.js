@@ -1,24 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const exampleDrivers = [
-  { id: '1', name: 'Pedro Lopez', vehicle: 'Van', image: require('../assets/ConductorTemp.png'), rating: 4.5, plate: 'ABC123', dimensions: '4x2', availability: '9am - 6pm' },
-  { id: '2', name: 'Ramiro Tyson', vehicle: 'Camion', image: require('../assets/ConductorTemp.png'), rating: 4.8, plate: 'XYZ789', dimensions: '6x3', availability: '10am - 5pm' },
-  { id: '3', name: 'Carlos Perez', vehicle: 'Camion', image: require('../assets/ConductorTemp.png'), rating: 4.7, plate: 'LMN456', dimensions: '5x3', availability: '8am - 4pm' },
-  { id: '4', name: 'Diego Garcia', vehicle: 'Flete', image: require('../assets/ConductorTemp.png'), rating: 4.6, plate: 'OPQ123', dimensions: '6x2', availability: '7am - 3pm' },
+  { id: '1', name: 'Pedro Lopez', vehicle: 'Van', cargoType: 'Mudanzas', enterprise: 'Empresa A', image: require('../assets/ConductorTemp.png'), rating: 4.5, plate: 'ABC123', dimensions: '4x2', availability: '9am - 6pm' },
+  { id: '2', name: 'Ramiro Tyson', vehicle: 'Camion', cargoType: 'Eventos', enterprise: 'Empresa B', image: require('../assets/ConductorTemp.png'), rating: 4.8, plate: 'XYZ789', dimensions: '6x3', availability: '10am - 5pm' },
+  { id: '3', name: 'Carlos Perez', vehicle: 'Camion', cargoType: 'Fragil', enterprise: 'Empresa C', image: require('../assets/ConductorTemp.png'), rating: 4.7, plate: 'LMN456', dimensions: '5x3', availability: '8am - 4pm' },
+  { id: '4', name: 'Diego Garcia', vehicle: 'Flete', cargoType: 'Instrumentos', enterprise: 'Empresa D', image: require('../assets/ConductorTemp.png'), rating: 4.6, plate: 'OPQ123', dimensions: '6x2', availability: '7am - 3pm' },
 ];
 
 const ContactScreen = ({ navigation }) => {
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('DriverProfile', { driver: item })}>
-      <View style={styles.itemContainer}>
-        <Image source={item.image} style={styles.driverImage} />
-        <Text style={styles.vehicleType}>{item.vehicle}</Text>
-        <Text style={styles.driverName}>{item.name}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const [selectedFilter, setSelectedFilter] = useState({ vehicle: null, cargoType: null, enterprise: null });
+
+  const applyFilter = (type, value) => {
+    setSelectedFilter(prev => ({ ...prev, [type]: value }));
+    navigation.navigate('Drivers', { filter: { ...selectedFilter, [type]: value } });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -39,10 +36,12 @@ const ContactScreen = ({ navigation }) => {
             { id: '4', name: 'Flete', icon: require('../assets/Flete.png') },
           ]}
           renderItem={({ item }) => (
-            <View style={styles.carouselItem}>
-              <Image source={item.icon} style={styles.iconImage} />
-              <Text style={styles.carouselText}>{item.name}</Text>
-            </View>
+            <TouchableOpacity onPress={() => applyFilter('vehicle', item.name)}>
+              <View style={styles.carouselItem}>
+                <Image source={item.icon} style={styles.iconImage} />
+                <Text style={styles.carouselText}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
@@ -64,15 +63,18 @@ const ContactScreen = ({ navigation }) => {
             { id: '4', name: 'Fragil', icon: require('../assets/Fragil.png') },
           ]}
           renderItem={({ item }) => (
-            <View style={styles.carouselItem}>
-              <Image source={item.icon} style={styles.cargas} />
-              <Text style={styles.carouselText}>{item.name}</Text>
-            </View>
+            <TouchableOpacity onPress={() => applyFilter('cargoType', item.name)}>
+              <View style={styles.carouselItem}>
+                <Image source={item.icon} style={styles.cargas} />
+                <Text style={styles.carouselText}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
         />
 
+        {/* Empresas Section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Empresas</Text>
           <TouchableOpacity onPress={() => console.log('Empresas button pressed')}>
@@ -88,15 +90,18 @@ const ContactScreen = ({ navigation }) => {
             { id: '4', name: 'Empresa D' },
           ]}
           renderItem={({ item }) => (
-            <View style={styles.carouselItem}>
-              <Text style={styles.companyLetter}>{item.name.charAt(item.name.length - 1)}</Text>
-              <Text style={styles.carouselText}>{item.name}</Text>
-            </View>
+            <TouchableOpacity onPress={() => applyFilter('enterprise', item.name)}>
+              <View style={styles.carouselItem}>
+                <Text style={styles.companyLetter}>{item.name.charAt(item.name.length - 1)}</Text>
+                <Text style={styles.carouselText}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
         />
 
+        {/* Drivers Carousel */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Conductores</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Drivers')}>
@@ -106,7 +111,15 @@ const ContactScreen = ({ navigation }) => {
         <FlatList
           horizontal
           data={exampleDrivers}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate('DriverProfile', { driver: item })}>
+              <View style={styles.itemContainer}>
+                <Image source={item.image} style={styles.driverImage} />
+                <Text style={styles.vehicleType}>{item.vehicle}</Text>
+                <Text style={styles.driverName}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
         />
@@ -116,66 +129,19 @@ const ContactScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  container: {
-    padding: 16,
-    flex: 1,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  carouselItem: {
-    alignItems: 'center',
-    marginHorizontal: 15,
-  },
-  iconImage: {
-    width: 80,
-    height: 80,
-    marginBottom: 5,
-  },
-  cargas: {
-    width: 60,
-    height: 60,
-    marginBottom: 5,
-    marginTop: 20,
-  },
-  carouselText: {
-    fontSize: 14,
-    color: '#000',
-  },
-  companyLetter: {
-    fontSize: 60,
-    fontWeight: 'bold',
-    color: '#AAC1C8',
-  },
-  itemContainer: {
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  driverImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginBottom: 5,
-    marginTop: 7,
-  },
-  vehicleType: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  driverName: {
-    fontSize: 14,
-    color: '#000',
-  },
+  safeArea: { flex: 1, backgroundColor: 'white' },
+  container: { padding: 16, flex: 1 },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold' },
+  carouselItem: { alignItems: 'center', marginHorizontal: 15 },
+  iconImage: { width: 80, height: 80, marginBottom: 5 },
+  cargas: { width: 60, height: 60, marginBottom: 5, marginTop: 20 },
+  carouselText: { fontSize: 14, color: '#000' },
+  companyLetter: { fontSize: 60, fontWeight: 'bold', color: '#AAC1C8' },
+  itemContainer: { alignItems: 'center', marginHorizontal: 10 },
+  driverImage: { width: 70, height: 70, borderRadius: 35, marginBottom: 5 },
+  vehicleType: { fontSize: 14, color: 'gray' },
+  driverName: { fontSize: 14, color: '#000' },
 });
 
 export default ContactScreen;

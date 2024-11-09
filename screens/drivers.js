@@ -1,46 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TextInput, SafeAreaView, Dimensions, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
 const driversData = [
-  { id: '1', name: 'Pedro Lopez', vehicle: 'Van', dimensions: '2.5 × 1.7 × 1.5', rating: 4.5, image: require('../assets/ConductorTemp.png') },
-  { id: '2', name: 'Juan Carlos Rivas', vehicle: 'Van', dimensions: '3.0 × 2.0 × 2.5', rating: 4.7, image: require('../assets/ConductorTemp.png') },
-  { id: '3', name: 'Maria Gonzales', vehicle: 'Furgoneta', dimensions: '2.0 × 1.5 × 1.2', rating: 4.3, image: require('../assets/ConductorTemp.png') },
-  { id: '4', name: 'Carlos Sanchez', vehicle: 'Camion', dimensions: '3.5 × 2.2 × 2.0', rating: 4.8, image: require('../assets/ConductorTemp.png') },
+  { id: '1', name: 'Pedro Lopez', vehicle: 'Van', cargoType: 'Instrumentos', enterprise: 'Empresa A', dimensions: '2.5 × 1.7 × 1.5', rating: 4.5, image: require('../assets/ConductorTemp.png') },
+  { id: '2', name: 'Juan Carlos Rivas', vehicle: 'Van', cargoType: 'Eventos', enterprise: 'Empresa B', dimensions: '3.0 × 2.0 × 2.5', rating: 4.7, image: require('../assets/ConductorTemp.png') },
+  { id: '3', name: 'Maria Gonzales', vehicle: 'Furgoneta', cargoType: 'Fragil', enterprise: 'Empresa C', dimensions: '2.0 × 1.5 × 1.2', rating: 4.3, image: require('../assets/ConductorTemp.png') },
+  { id: '4', name: 'Carlos Sanchez', vehicle: 'Camion', cargoType: 'Fragil', enterprise: 'Empresa D', dimensions: '3.5 × 2.2 × 2.0', rating: 4.8, image: require('../assets/ConductorTemp.png') },
 ];
 
-const DriversList = ({ navigation }) => {
+const DriversList = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDrivers, setFilteredDrivers] = useState(driversData);
+  const [activeFilters, setActiveFilters] = useState({ vehicle: null, cargoType: null, enterprise: null });
+
+  useEffect(() => {
+    const { filter } = route.params || {};
+    if (filter) {
+      setActiveFilters(prevFilters => ({ ...prevFilters, ...filter }));
+    }
+  }, [route.params]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [activeFilters, searchQuery]);
+
+  const applyFilters = () => {
+    let filtered = driversData;
+
+    // Apply active filters (vehicle, cargoType, enterprise)
+    if (activeFilters.vehicle) {
+      filtered = filtered.filter(driver => driver.vehicle === activeFilters.vehicle);
+    }
+    if (activeFilters.cargoType) {
+      filtered = filtered.filter(driver => driver.cargoType === activeFilters.cargoType);
+    }
+    if (activeFilters.enterprise) {
+      filtered = filtered.filter(driver => driver.enterprise === activeFilters.enterprise);
+    }
+
+    // Apply search filter on top of active filters
+    if (searchQuery) {
+      filtered = filtered.filter(driver =>
+        driver.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredDrivers(filtered);
+  };
+
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+  };
 
   const navigateToProfile = (driver) => {
     navigation.navigate('DriverProfile', { driver });
   };
 
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    const filtered = driversData.filter(driver =>
-      driver.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredDrivers(filtered);
-  };
-
   const renderDriverItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigateToProfile(item)}>
-        <View style={styles.driverCard}>
+      <View style={styles.driverCard}>
         <Image source={item.image} style={styles.driverImage} />
         <View style={styles.driverInfo}>
-            <Text style={styles.driverName}>{item.name}</Text>
-            <Text style={styles.driverDetails}>Vehiculo: {item.vehicle}</Text>
-            <Text style={styles.driverDetails}>Dimensiones: {item.dimensions}</Text>
-            <View style={styles.driverRating}>
+          <Text style={styles.driverName}>{item.name}</Text>
+          <Text style={styles.driverDetails}>Vehiculo: {item.vehicle}</Text>
+          <Text style={styles.driverDetails}>Dimensiones: {item.dimensions}</Text>
+          <View style={styles.driverRating}>
             <Ionicons name="star" size={16} color="#6B9AC4" />
             <Text style={styles.ratingText}>{item.rating}</Text>
-            </View>
+          </View>
         </View>
-        </View>
+      </View>
     </TouchableOpacity>
   );
 
@@ -74,16 +106,12 @@ const DriversList = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
+  safeArea: { flex: 1, backgroundColor: 'white' },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 10,
-
     borderBottomColor: '#E5E5E5',
   },
   headerTitle: {
@@ -129,7 +157,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderColor: '#E5E5E5',
     borderWidth: 1,
-    width: width - 40, 
+    width: width - 40,
     alignSelf: 'center',
   },
   driverImage: {
