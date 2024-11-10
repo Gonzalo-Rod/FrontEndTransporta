@@ -70,7 +70,7 @@ const Route = () => {
           style={styles.routeList}
         />
 
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('ChooseVehicle', { partida, destino })}>
           <Text style={styles.continueButtonText}>Continuar</Text>
         </TouchableOpacity>
       </View>

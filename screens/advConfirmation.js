@@ -39,7 +39,7 @@ const AdvConfirmation = ({ navigation, route }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.detailsButton}>
+          <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('Main', { screen: 'Reservations' })}>
             <Text style={styles.detailsButtonText}>Detalles</Text>
           </TouchableOpacity>
         </View>

@@ -17,6 +17,9 @@ import AddCreditCard from './screens/addCard';
 import Activity from './screens/actividad';
 import Reservations from './screens/reservation';
 import ReservationRoute from './screens/rsvRoute';
+import ChooseVehicle from './screens/chooseVehicle';
+import DetailsCard from './components/ServiceDetails/DetailsCard';
+import ServiceDetails from './screens/serviceDetails';
 
 export default function App() {
 
@@ -39,6 +42,9 @@ export default function App() {
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="Reservations" component={Reservations} />
       <Stack.Screen name="ReservationRoute" component={ReservationRoute} />
+      <Stack.Screen name="ChooseVehicle" component={ChooseVehicle} />
+      <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
+      <Stack.Screen name="DetailsCard" component={DetailsCard} />
       </Stack.Navigator>
     )
   }
