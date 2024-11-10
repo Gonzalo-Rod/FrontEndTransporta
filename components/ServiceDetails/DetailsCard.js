@@ -9,7 +9,7 @@ const driversData = [
 
 const DetailsCard = () => {
   const navigation = useNavigation();
-  const driver = driversData[0]; // Using the first driver as an example
+  const driver = driversData[0];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,7 +22,7 @@ const DetailsCard = () => {
           <Text style={styles.driverDetails}>{driver.vehicle}</Text>
         </View>
         <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={16} color="#4A90E2" />
+          <Ionicons name="star" size={30} color="#4A90E2" />
           <Text style={styles.ratingText}>{driver.rating}</Text>
         </View>
       </TouchableOpacity>
@@ -44,8 +44,10 @@ const DetailsCard = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Pago</Text>
         <View style={styles.paymentContainer}>
-          <Image source={require('../../assets/Visa.png')} style={styles.paymentIcon} />
-          <Text style={styles.paymentDetails}>**** 1234</Text>
+          <View style={styles.paymentDetailsContainer}>
+            <Image source={require('../../assets/Visa.png')} style={styles.paymentIcon} />
+            <Text style={styles.paymentDetails}>**** 1234</Text>
+          </View>
           <Text style={styles.paymentAmount}>S/. 100</Text>
         </View>
       </View>
@@ -69,14 +71,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
+    marginHorizontal: 7,
   },
   driverCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFFFFF',
     marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
   driverImage: {
     width: 60,
@@ -99,12 +107,12 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
     padding: 5,
     borderRadius: 15,
   },
   ratingText: {
-    fontSize: 14,
+    fontSize: 20,
     color: '#4A90E2',
     marginLeft: 5,
   },
@@ -138,10 +146,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  paymentDetailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   paymentIcon: {
     width: 30,
     height: 20,
-    marginRight: 10,
+    marginRight: 8,
   },
   paymentDetails: {
     fontSize: 16,

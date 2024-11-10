@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import tw from "tailwind-react-native-classnames";
 import Map from "../components/HomeMap/Map";
-import DetailsCard from "../components/ChooseVehicle/VehicleCard";
+import DetailsCard from "../components/ServiceDetails/DetailsCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 
 const ServiceDetails = () => {
     const navigation = useNavigation();
-    const snapPoints = useMemo(() => ["30%", "50%"], []);
+    const snapPoints = useMemo(() => ["26%", "50%"], []);
 
     return (
         <View style={tw`flex-1`}>
