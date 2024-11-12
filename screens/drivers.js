@@ -3,56 +3,40 @@ import { View, Text, StyleSheet, FlatList, Image, TextInput, SafeAreaView, Dimen
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
-
-const driversData = [
-  { id: '1', name: 'Pedro Lopez', vehicle: 'Van', cargoType: 'Instrumentos', enterprise: 'Empresa A', dimensions: '2.5 × 1.7 × 1.5', rating: 4.5, image: require('../assets/ConductorTemp.png') },
-  { id: '2', name: 'Juan Carlos Rivas', vehicle: 'Van', cargoType: 'Eventos', enterprise: 'Empresa B', dimensions: '3.0 × 2.0 × 2.5', rating: 4.7, image: require('../assets/ConductorTemp.png') },
-  { id: '3', name: 'Maria Gonzales', vehicle: 'Furgoneta', cargoType: 'Fragil', enterprise: 'Empresa C', dimensions: '2.0 × 1.5 × 1.2', rating: 4.3, image: require('../assets/ConductorTemp.png') },
-  { id: '4', name: 'Carlos Sanchez', vehicle: 'Camion', cargoType: 'Fragil', enterprise: 'Empresa D', dimensions: '3.5 × 2.2 × 2.0', rating: 4.8, image: require('../assets/ConductorTemp.png') },
-];
+const defaultRating = 5;
 
 const DriversList = ({ navigation, route }) => {
+  const { vehiculos } = route.params;
+  console.log(vehiculos)
+
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredDrivers, setFilteredDrivers] = useState(driversData);
-  const [activeFilters, setActiveFilters] = useState({ vehicle: null, cargoType: null, enterprise: null });
+  const [filteredDrivers, setFilteredDrivers] = useState([]);
 
   useEffect(() => {
-    const { filter } = route.params || {};
-    if (filter) {
-      setActiveFilters(prevFilters => ({ ...prevFilters, ...filter }));
-    }
-  }, [route.params]);
+    const drivers = vehiculos ? vehiculos.map((driver) => ({
+      id: driver.placa.S,
+      name: driver.nombre_conductor.S,
+      mail: driver.correo_conductor.S,
+      lastname: driver.apellido_conductor.S,
+      phone: driver.telefono.S,
+      vehicle: driver.tipo_transporte.S,
+      plate: driver.placa.S,
+      ancho: driver.dimensiones.M.ancho.S,
+      largo: driver.dimensiones.M.largo.S,
+      altura: driver.dimensiones.M.altura.S,
+      rating: defaultRating,
+      image: require('../assets/ConductorTemp.png'),
+    })) : driversData;
 
-  useEffect(() => {
-    applyFilters();
-  }, [activeFilters, searchQuery]);
-
-  const applyFilters = () => {
-    let filtered = driversData;
-
-    // Apply active filters (vehicle, cargoType, enterprise)
-    if (activeFilters.vehicle) {
-      filtered = filtered.filter(driver => driver.vehicle === activeFilters.vehicle);
-    }
-    if (activeFilters.cargoType) {
-      filtered = filtered.filter(driver => driver.cargoType === activeFilters.cargoType);
-    }
-    if (activeFilters.enterprise) {
-      filtered = filtered.filter(driver => driver.enterprise === activeFilters.enterprise);
-    }
-
-    // Apply search filter on top of active filters
-    if (searchQuery) {
-      filtered = filtered.filter(driver =>
-        driver.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    setFilteredDrivers(filtered);
-  };
+    setFilteredDrivers(drivers);
+  }, [vehiculos]);
 
   const handleSearch = (text) => {
     setSearchQuery(text);
+    const filtered = filteredDrivers.filter(driver =>
+      driver.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredDrivers(filtered);
   };
 
   const navigateToProfile = (driver) => {
@@ -64,9 +48,9 @@ const DriversList = ({ navigation, route }) => {
       <View style={styles.driverCard}>
         <Image source={item.image} style={styles.driverImage} />
         <View style={styles.driverInfo}>
-          <Text style={styles.driverName}>{item.name}</Text>
+          <Text style={styles.driverName}>{item.name} {item.lastname}</Text>
           <Text style={styles.driverDetails}>Vehiculo: {item.vehicle}</Text>
-          <Text style={styles.driverDetails}>Dimensiones: {item.dimensions}</Text>
+          <Text style={styles.driverDetails}>Dimensiones: {item.ancho} x {item.largo} x {item.altura}</Text>
           <View style={styles.driverRating}>
             <Ionicons name="star" size={16} color="#6B9AC4" />
             <Text style={styles.ratingText}>{item.rating}</Text>
@@ -84,7 +68,6 @@ const DriversList = ({ navigation, route }) => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Conductores</Text>
       </View>
-
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color="gray" style={styles.searchIcon} />
         <TextInput
@@ -94,7 +77,6 @@ const DriversList = ({ navigation, route }) => {
           onChangeText={handleSearch}
         />
       </View>
-
       <FlatList
         data={filteredDrivers}
         keyExtractor={item => item.id}
@@ -106,7 +88,10 @@ const DriversList = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'white' },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -157,7 +142,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderColor: '#E5E5E5',
     borderWidth: 1,
-    width: width - 40,
+    width: width - 40, 
     alignSelf: 'center',
   },
   driverImage: {

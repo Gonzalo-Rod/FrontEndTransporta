@@ -1,18 +1,66 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 const { width } = Dimensions.get('window');
+import { getUser,getToken } from "../utils/Auth";
+const url = "https://z9i523elr0.execute-api.us-east-1.amazonaws.com/dev/get-user";
+const headers = {
+	"Content-Type":"application/json"
+};
+import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
+
+
 
 const UserProfile = ({ navigation }) => {
-  const user = {
-    name: "Mariano Hidalgo",
-    phone: "+51 999 999 999",
-    email: "mariano.hidalgo@gmail.com",
-    password: "************",
-    role: "Cliente",
-    image: { uri: 'https://via.placeholder.com/100' }, 
-  };
+	const [user,setUser] = useState("");
+	const [token,setToken] = useState("");
+	const [user_data,setUser_data] = useState("");
+	const [image,setImage] = useState({ uri: 'https://via.placeholder.com/100' });
+
+	const test = () => {
+		(async () => {
+			const useR = await getUser();
+			const tokeN = await getToken();
+			setUser(useR);
+			setToken(tokeN);
+		})();
+	};
+	useEffect(() => {test();},[]);
+	const getUsersito = async () => {
+		try {
+			const info = {
+				correo:user,
+				token:token
+			}
+			const json_data = {
+				httpMethod:"GET",
+				path:"/get-user",
+				body:JSON.stringify(info)
+			}
+			const method = "POST";
+			response = await axios({
+				method:method,
+				url:url,
+				headers:headers,
+				data:json_data
+			})
+			const user_data = JSON.parse(response.data.body).response;
+			setUser_data(user_data);
+			console.log(user_data);
+
+		} catch (error){ console.log(error) }
+	}
+	
+	
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user && token) {
+        getUsersito();   
+      }
+    }, [user, token])  
+  );
+
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,10 +73,10 @@ const UserProfile = ({ navigation }) => {
 
       <View style={styles.profileContainer}>
         <View style={styles.profileDetails}>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userRole}>{user.role}</Text>
+          <Text style={styles.userName}>{user_data?.nombre?.S ||"Cargando..."} {user_data?.apellido?.S}</Text>
+          <Text style={styles.userRole}>{"User"}</Text>
         </View>
-        <Image source={user.image} style={styles.userImage} />
+        <Image source={image} style={styles.userImage} />
       </View>
 
       <View style={styles.buttonsContainer}>
@@ -36,7 +84,7 @@ const UserProfile = ({ navigation }) => {
           <Ionicons name="notifications-outline" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Actividad</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PaymentInfo')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PaymentInfo',{user_data:user_data?.metodo_de_pago?.S})}>
           <Ionicons name="card-outline" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Pago</Text>
         </TouchableOpacity>
@@ -46,15 +94,15 @@ const UserProfile = ({ navigation }) => {
         <Text style={styles.infoTitle}>Datos personales</Text>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Nombre</Text>
-          <Text style={styles.infoValue}>{user.name}</Text>
+          <Text style={styles.infoValue}>{user_data?.nombre?.S + " " + user_data?.apellido?.S || "Cargando..."}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Celular</Text>
-          <Text style={styles.infoValue}>{user.phone}</Text>
+          <Text style={styles.infoValue}>{user_data?.telefono?.S || "Cargando..."}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Email</Text>
-          <Text style={styles.infoValue}>{user.email}</Text>
+          <Text style={styles.infoValue}>{user_data?.correo?.S || "Cargando..."}</Text>
         </View>
       </View>
 
@@ -64,6 +112,8 @@ const UserProfile = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   safeArea: {

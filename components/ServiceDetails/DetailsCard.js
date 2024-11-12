@@ -9,11 +9,16 @@ const driversData = [
 
 const DetailsCard = () => {
   const navigation = useNavigation();
-  const driver = driversData[0];
+  const driver = driversData[0]; 
+
+  const origin = "Jiron Medrano Silva, 165";
+  const destination = "Jiron Medrano Silva, 165";
+  const creditCard = "**** 1234";
+  const price = "S/. 100";
+  const date = "Lunes, Agosto 17 20:00h GMT-5";
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Driver Info Button */}
       <TouchableOpacity style={styles.driverCard} onPress={() => navigation.navigate('DriverProfile', { driver })}>
         <Image source={driver.image} style={styles.driverImage} />
         <View style={styles.driverInfo}>
@@ -22,44 +27,42 @@ const DetailsCard = () => {
           <Text style={styles.driverDetails}>{driver.vehicle}</Text>
         </View>
         <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={30} color="#4A90E2" />
+          <Ionicons name="star" size={32} color="#6B9AC4" style={styles.ratingIcon} />
           <Text style={styles.ratingText}>{driver.rating}</Text>
         </View>
       </TouchableOpacity>
 
-      {/* Route Information */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Ruta</Text>
         <View style={styles.routeContainer}>
           <Text style={styles.routePoint}>Origen</Text>
-          <Text style={styles.routeAddress}>Jiron Medrano Silva, 165</Text>
+          <Text style={styles.routeAddress}>{origin}</Text>
         </View>
         <View style={styles.routeContainer}>
           <Text style={styles.routePoint}>Destino</Text>
-          <Text style={styles.routeAddress}>Jiron Medrano Silva, 165</Text>
+          <Text style={styles.routeAddress}>{destination}</Text>
         </View>
       </View>
 
-      {/* Payment Information */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Pago</Text>
         <View style={styles.paymentContainer}>
           <View style={styles.paymentDetailsContainer}>
             <Image source={require('../../assets/Visa.png')} style={styles.paymentIcon} />
-            <Text style={styles.paymentDetails}>**** 1234</Text>
+            <Text style={styles.paymentDetails}>{creditCard}</Text>
           </View>
-          <Text style={styles.paymentAmount}>S/. 100</Text>
+          <Text style={styles.paymentAmount}>{price}</Text>
         </View>
       </View>
 
       {/* Date Information */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Fecha</Text>
-        <Text style={styles.dateText}>Lunes, Agosto 17 20:00h GMT-5</Text>
+        <Text style={styles.dateText}>{date}</Text>
       </View>
 
       {/* Cancel Button */}
-      <TouchableOpacity style={styles.cancelButton}>
+      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    marginHorizontal: 7,
   },
   driverCard: {
     flexDirection: 'row',
@@ -105,20 +107,19 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 5,
-    borderRadius: 15,
+    marginRight: 10,
+    alignItems: 'center', 
+  },
+  ratingIcon: {
+    marginBottom: 2, 
   },
   ratingText: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#4A90E2',
-    marginLeft: 5,
   },
   section: {
     borderTopWidth: 1,
-    borderTopColor: '#DADADA',
+    borderTopColor: '#6B9AC4',
     paddingVertical: 10,
   },
   sectionTitle: {

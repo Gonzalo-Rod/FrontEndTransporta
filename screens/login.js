@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import auth from '../utils/Auth';
 import axios from "axios"; 
 
 export default function LoginScreen(props) {
@@ -29,9 +30,14 @@ export default function LoginScreen(props) {
       };
 
       const response = await axios.post(url_register, data, { headers });
-      const verify = JSON.parse(response.data.body).token
+      const datita = JSON.parse(response.data.body);
 
-      if (verify) {
+      if (datita.token) {
+				console.log(datita);
+				console.log(datita.user);
+				console.log(datita.user.correo);
+				console.log(datita.user.correo,datita.token);
+				auth.setUserSession(datita.user.correo,datita.token);
         props.navigation.navigate("Main");
       } else {
         setErrorMessage("Correo o contraseña incorrectos");

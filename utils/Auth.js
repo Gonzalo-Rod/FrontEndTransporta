@@ -27,7 +27,7 @@ async function getToken() {
 
 async function setUserSession(user, token) {
     try {
-        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem('user', user);
         await AsyncStorage.setItem('token', token);
     } catch (error) {
         console.error('Error al establecer la sesión del usuario:', error);

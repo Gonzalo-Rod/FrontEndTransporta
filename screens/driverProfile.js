@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -6,8 +6,13 @@ const { width } = Dimensions.get('window');
 
 const DriverProfile = ({ navigation, route }) => {
   const { driver } = route.params;
-  const driverName = driver.name;
-  console.log(driverName)
+
+  const [driverData, setDriverData] = useState(null);
+
+  useEffect(() => {
+    setDriverData(driver);
+  }, [driver]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.headerContainer}>
@@ -19,7 +24,7 @@ const DriverProfile = ({ navigation, route }) => {
 
       <View style={styles.profileContainer}>
         <View style={styles.profileDetails}>
-          <Text style={styles.driverName}>{driver.name}</Text>
+          <Text style={styles.driverName}>{driver.name} {driver.lastname}</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="white" />
             <Text style={styles.ratingText}>{driver.rating.toFixed(2)}</Text>
@@ -33,7 +38,7 @@ const DriverProfile = ({ navigation, route }) => {
           <Ionicons name="chatbox" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Contacto</Text>
         </TouchableOpacity> 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdvReservation')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdvReservation', { driverData })}>
           <Ionicons name="calendar" size={20} color="#6B9AC4" />
           <Text style={styles.buttonText}>Reservar</Text>
         </TouchableOpacity>
@@ -47,11 +52,11 @@ const DriverProfile = ({ navigation, route }) => {
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Vehiculo</Text>
-          <Text style={styles.infoValue}>{driver.vehicle}</Text>
+          <Text style={styles.infoValue}>{driver.vehicle.charAt(0).toUpperCase() + driver.vehicle.slice(1)}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Dimensiones</Text>
-          <Text style={styles.infoValue}>{driver.dimensions}</Text>
+          <Text style={styles.infoValue}>{driver.ancho} x {driver.largo} x {driver.altura}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Disponibilidad</Text>

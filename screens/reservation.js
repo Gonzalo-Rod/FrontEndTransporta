@@ -1,13 +1,122 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import axios from "axios";
+import {getUser,getToken} from '../utils/Auth';
+import { useFocusEffect } from '@react-navigation/native';
+
+const url = "https://mj8h12vo9d.execute-api.us-east-1.amazonaws.com/dev/get-mis-reservas";
+const url_1 = "https://mj8h12vo9d.execute-api.us-east-1.amazonaws.com/dev/get-reserva";
+const headers = {
+	"Content-Type":"application/json"
+};
+
+
+
+
 const Reservations = ({ navigation }) => {
-  const routes = [
-    { id: '1', address: 'Jr. Medrano Silva 165, Barranco', date: '4/9/2024', status: 'accepted' },
-    { id: '2', address: 'Jr. Medrano Silva 165, Barranco', date: '4/9/2024', status: 'pending' },
-    { id: '3', address: 'Jr. Medrano Silva 165, Barranco', date: '4/9/2024', status: 'pending' },
-  ];
+
+	
+	const [reservas,setReservas] = useState([]);
+	const [user,setUser] = useState("");
+	const [token,setToken] = useState("");
+	const [reserva_id,setReserva_id] = useState("");
+
+	const test = () => {
+		(async () => {
+			const useR = await getUser();
+			const tokeN = await getToken();
+			setUser(useR);
+			setToken(tokeN);
+		})();
+	}
+	useEffect(() => {test();},[]);
+
+	const reservations = async () => {
+
+		try {
+			const info = {
+				correo:user,
+        rol:"user",
+				parametro:"estado",
+        valor:"-",
+				token : token
+			};
+			const json_data = {
+				httpMethod:"GET",
+				path:"/get-mis-reservas",
+				body: JSON.stringify(info)
+			}
+			const method = "POST";
+	
+			response = await axios({
+				method:method,
+				url:url,
+				headers:headers,
+				data:json_data
+			})
+			const reservitas = JSON.parse(response.data.body).response;
+			const formattedReservations = reservitas.map(item => ({
+				placa: item.placa.S,
+				inicio: item.inicio.S,
+				llegada: item.llegada.S,
+				fecha: item.fecha.S,
+				hora: item.hora.S,
+				estado: item.estado.S
+			}));
+			setReservas(formattedReservations);
+			console.log(formattedReservations);
+		} catch (error){console.log(error);}
+
+	};
+	
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user && token) {
+        reservations();   
+      }
+    }, [user, token])  
+  );
+
+	const get_reserva = async () => {
+		try {
+			const info = {
+				correo:user,
+				tabla:"flete_users",
+				token:token
+			};
+			const json_data = {
+				httpMethod:"GET",
+				path:"/get-reserva",
+				body: JSON.stringify(info)
+			}
+			const method = "POST";
+			response = await axios({
+				method:method,
+				url:url_1,
+				headers:headers,
+				data:json_data
+			})
+			console.log(info);
+			const reservita1 = JSON.parse(response.data.body).response;
+			console.log("RESERVITA1 ",reservita1);
+		} catch (error){console.log(error);}
+
+	};
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user && token) {
+        get_reserva();   
+      }
+    }, [user, token])  
+  );
+
+
+
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,12 +131,14 @@ const Reservations = ({ navigation }) => {
       </TouchableOpacity>
 
       <View style={styles.reservationsList}>
-        {routes.map((route) => (
+        {reservas.map(route => (
           <ReservationItem
-            key={route.id}
-            address={route.address}
-            date={route.date}
-            status={route.status}
+            placa={route.placa}
+						inicio={route.inicio}
+            llegada={route.llegada}
+            fecha={route.fecha}
+						hora={route.hora}
+            estado={route.estado}
           />
         ))}
       </View>
@@ -35,14 +146,14 @@ const Reservations = ({ navigation }) => {
   );
 };
 
-const ReservationItem = ({ address, date, status }) => (
+const ReservationItem = ({ placa, inicio, llegada ,fecha, hora ,estado }) => (
   <TouchableOpacity style={styles.reservationItem}>
     <Ionicons name="calendar-outline" size={24} color="#4A90E2" />
     <View style={styles.reservationTextContainer}>
-      <Text style={styles.reservationText}>{address}</Text>
-      <Text style={styles.reservationDate}>{date}</Text>
+			<Text style={styles.reservationText}>{inicio}</Text>
+      <Text style={styles.reservationDate}>{fecha}</Text>
     </View>
-    {status === 'accepted' ? (
+    {estado === 'aceptada' ? (
       <Ionicons name="checkmark" size={24} color="#4CAF50" />
     ) : (
       <Ionicons name="hourglass-outline" size={24} color="#D3A53A" />

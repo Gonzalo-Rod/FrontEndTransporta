@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from "axios";
+
+const url = "https://h8019u59m4.execute-api.us-east-1.amazonaws.com/dev/get-vehiculos";
+const headers = {
+  "Content-Type": "application/json"
+};
 
 const exampleDrivers = [
   { id: '1', name: 'Pedro Lopez', vehicle: 'Van', cargoType: 'Mudanzas', enterprise: 'Empresa A', image: require('../assets/ConductorTemp.png'), rating: 4.5, plate: 'ABC123', dimensions: '4x2', availability: '9am - 6pm' },
@@ -11,10 +18,44 @@ const exampleDrivers = [
 
 const ContactScreen = ({ navigation }) => {
   const [selectedFilter, setSelectedFilter] = useState({ vehicle: null, cargoType: null, enterprise: null });
+  const [vehiculos, setVehiculos] = useState([]);
+
+  const get_vehiculos = async (parametro, valor) => {
+    try {
+      const info = {
+        parametro: parametro,
+        valor: valor.toLowerCase(),
+      };
+      const json_data = {
+        httpMethod: "GET",
+        path: "/get-vehiculos",
+        body: JSON.stringify(info)
+      };
+      const method = "POST";
+      const response = await axios({
+        method,
+        url,
+        headers,
+        data: json_data
+      });
+      const responseData = JSON.parse(response.data.body).response;
+      setVehiculos(responseData);
+      // Navigate to Drivers screen with vehiculos data
+      navigation.navigate('Drivers', { vehiculos: responseData });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const applyFilter = (type, value) => {
-    setSelectedFilter(prev => ({ ...prev, [type]: value }));
-    navigation.navigate('Drivers', { filter: { ...selectedFilter, [type]: value } });
+    const lowercaseValue = value.toLowerCase();
+    setSelectedFilter(prev => ({ ...prev, [type]: lowercaseValue}));
+
+    let parametro;
+    if (type === 'vehicle') parametro = 'tipo_transporte';
+    else if (type === 'cargoType') parametro = 'tipo_carga';
+    else if (type === 'enterprise') parametro = 'empresa';
+    get_vehiculos(parametro, value);
   };
 
   return (
@@ -138,10 +179,10 @@ const styles = StyleSheet.create({
   cargas: { width: 60, height: 60, marginBottom: 5, marginTop: 20 },
   carouselText: { fontSize: 14, color: '#000' },
   companyLetter: { fontSize: 60, fontWeight: 'bold', color: '#AAC1C8' },
-  itemContainer: { alignItems: 'center', marginHorizontal: 10 },
-  driverImage: { width: 70, height: 70, borderRadius: 35, marginBottom: 5 },
-  vehicleType: { fontSize: 14, color: 'gray' },
-  driverName: { fontSize: 14, color: '#000' },
+  itemContainer: { alignItems: 'center', marginHorizontal: 15 },
+  driverImage: { width: 80, height: 80, borderRadius: 40, marginBottom: 5 },
+  driverName: { fontSize: 14, fontWeight: 'bold' },
+  vehicleType: { fontSize: 12, color: '#888' },
 });
 
 export default ContactScreen;
