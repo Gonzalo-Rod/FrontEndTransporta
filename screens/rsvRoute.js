@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import SearchLocation from '../components/Inputs/searchLocation';
 
 const ReservationRoute = () => {
   const navigation = useNavigation();
-  const [partida, setPartida] = useState('');
-  const [destino, setDestino] = useState('');
-  const [dia, setDia] = useState('');
+  const [inicio, setPartida] = useState('');
+  const [llegada, setDestino] = useState('');
+  const [fecha, setDia] = useState('');
   const [hora, setHora] = useState('');
   const [focusedInput, setFocusedInput] = useState(null);
 
@@ -48,40 +49,42 @@ const ReservationRoute = () => {
 
         <Text style={styles.headerText}>Selecciona la Ruta</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Partida"
-          placeholderTextColor="#ccc"
-          value={partida}
-          onChangeText={setPartida}
-          onFocus={() => setFocusedInput('partida')}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Destino"
-          placeholderTextColor="#ccc"
-          value={destino}
-          onChangeText={setDestino}
-          onFocus={() => setFocusedInput('destino')}
-        />
+        <SearchLocation
+        placeholder="Buscar partida"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setPartida(location);
+        }}
+      />
+        <SearchLocation
+        placeholder="Buscar destino"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setDestino(location);
+        }}
+      />
 
         <View style={styles.dateTimeContainer}>
-          <TextInput
-            style={[styles.input, styles.dateTimeInput]}
-            placeholder="Día"
-            placeholderTextColor="#ccc"
-            value={dia}
-            onChangeText={setDia}
-            onFocus={() => setFocusedInput('dia')}
-          />
-          <TextInput
-            style={[styles.input, styles.dateTimeInput]}
-            placeholder="Hora"
-            placeholderTextColor="#ccc"
-            value={hora}
-            onChangeText={setHora}
-            onFocus={() => setFocusedInput('hora')}
-          />
+          <View style={[styles.inputRow, styles.smallInput]}>
+            <Ionicons name="calendar" size={18} color="#A5A5A5" />
+            <TextInput
+              placeholder="Día"
+              style={styles.input}
+              value={fecha}
+              onChangeText={setDia}
+              onFocus={() => setFocusedInput('dia')}
+            />
+          </View>
+          <View style={[styles.inputRow, styles.smallInput]}>
+            <Ionicons name="alarm" size={18} color="#A5A5A5" />
+            <TextInput
+              placeholder="Hora"
+              style={styles.input}
+              value={hora}
+              onChangeText={setHora}
+              onFocus={() => setFocusedInput('hora')}
+            />
+          </View>
         </View>
 
         <FlatList
@@ -91,7 +94,7 @@ const ReservationRoute = () => {
           style={styles.routeList}
         />
 
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('RsvChooseVehicle', {inicio, llegada, fecha, hora}) }>
           <Text style={styles.continueButtonText}>Continuar</Text>
         </TouchableOpacity>
       </View>
@@ -101,6 +104,12 @@ const ReservationRoute = () => {
 };
 
 const styles = StyleSheet.create({
+  input: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#333',
+    flex: 1,
+  },
   safeContainer: {
     flex: 1,
     backgroundColor: 'white',
@@ -121,22 +130,22 @@ const styles = StyleSheet.create({
     left: 16,
     top: 20,
   },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 16,
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F4F4F4',
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    borderRadius: 8,
     marginBottom: 15,
-    backgroundColor: '#F6F6F6',
   },
   dateTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  dateTimeInput: {
+  smallInput: {
     flex: 1,
-    marginRight: 8,
+    marginRight: 10,
   },
   routeList: {
     marginVertical: 10,

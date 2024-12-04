@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import tw from "tailwind-react-native-classnames";
 import MapDetails from "../components/HomeMap/MapDetails";
-import DetailsCard from "../components/ServiceDetails/DetailsCard";
+import RsvVehicleList from "../components/ChooseVehicle/RsvVehicleCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 
-const ServiceDetails = () => {
+const RsvChooseVehicle = () => {
     const navigation = useNavigation();
-    const snapPoints = useMemo(() => ["26%", "50%"], []);
+    const snapPoints = useMemo(() => ["30%", "50%"], []);
 
     return (
         <View style={tw`flex-1`}>
@@ -28,10 +28,10 @@ const ServiceDetails = () => {
 
             {/* Bottom Sheet */}
             <BottomSheet index={1} snapPoints={snapPoints}>
-                <DetailsCard />
+                <RsvVehicleList />
             </BottomSheet>
         </View>
     );
 };
 
-export default ServiceDetails;
+export default RsvChooseVehicle;

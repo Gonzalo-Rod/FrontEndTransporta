@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import tw from "tailwind-react-native-classnames";
-import Map from "../components/HomeMap/Map";
+import MapDetails from "../components/HomeMap/MapDetails";
 import VehicleList from "../components/ChooseVehicle/VehicleCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 
@@ -23,7 +23,7 @@ const ChooseVehicle = () => {
 
             {/* Map Component */}
             <View style={tw`h-full`}>
-                <Map />
+                <MapDetails />
             </View>
 
             {/* Bottom Sheet */}

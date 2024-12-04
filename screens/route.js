@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import SearchLocation from '../components/Inputs/searchLocation';
 
 const Route = () => {
   const navigation = useNavigation();
-  const [partida, setPartida] = useState('');    
-  const [destino, setDestino] = useState('');    
+  const [inicio, setPartida] = useState('');    
+  const [llegada, setDestino] = useState('');    
   const [focusedInput, setFocusedInput] = useState(null); 
 
   const routes = [
@@ -46,22 +47,20 @@ const Route = () => {
 
         <Text style={styles.headerText}>Selecciona la Ruta</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Partida"
-          placeholderTextColor="#ccc"
-          value={partida}
-          onChangeText={setPartida}
-          onFocus={() => setFocusedInput('partida')} 
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Destino"
-          placeholderTextColor="#ccc"
-          value={destino}
-          onChangeText={setDestino}
-          onFocus={() => setFocusedInput('destino')} 
-        />
+        <SearchLocation
+        placeholder="Buscar partida"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setPartida(location);
+        }}
+      />
+        <SearchLocation
+        placeholder="Buscar destino"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setDestino(location);
+        }}
+      />
 
         <FlatList
           data={routes}
@@ -70,7 +69,7 @@ const Route = () => {
           style={styles.routeList}
         />
 
-        <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('ChooseVehicle', { partida, destino })}>
+        <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('ChooseVehicle', { inicio, llegada })}>
           <Text style={styles.continueButtonText}>Continuar</Text>
         </TouchableOpacity>
       </View>

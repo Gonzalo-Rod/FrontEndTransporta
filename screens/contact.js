@@ -38,6 +38,7 @@ const ContactScreen = ({ navigation }) => {
         headers,
         data: json_data
       });
+      console.log(response);
       const responseData = JSON.parse(response.data.body).response;
       setVehiculos(responseData);
       // Navigate to Drivers screen with vehiculos data

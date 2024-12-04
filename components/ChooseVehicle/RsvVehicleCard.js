@@ -37,28 +37,12 @@ const vehicles = [
   },
 ];
 
-const getCurrentDate = () => {
-  const date = new Date();
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
-};
-
-const getCurrentTime = () => {
-  const date = new Date();
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
-
-const VehicleList = () => {
+const RsvVehicleList = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { inicio , llegada } = route.params;
-  
-  const fecha = getCurrentDate();
-  const hora = getCurrentTime();
+  const { inicio , llegada, fecha, hora } = route.params;
+  console.log(hora)
+  console.log(fecha)
 
   const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0].id);
 
@@ -101,7 +85,7 @@ const VehicleList = () => {
       {selectedVehicle && (
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={() => navigation.navigate('ServiceDetails', {inicio, llegada, fecha, hora}) }
+          onPress={() => navigation.navigate('AdvConfirmation', {originAddress: inicio, destinationAddress: llegada, date: fecha, time: hora}) }
         >
           <Text style={styles.continueButtonText}>Continuar</Text>
         </TouchableOpacity>
@@ -177,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VehicleList;
+export default RsvVehicleList;

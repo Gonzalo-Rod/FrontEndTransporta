@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Dimensions, SafeAreaView, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import SearchLocation from '../components/Inputs/searchLocation';
+
 const { width } = Dimensions.get('window');
 const url = "https://mj8h12vo9d.execute-api.us-east-1.amazonaws.com/dev/reserva";
 const headers = {
@@ -193,25 +195,21 @@ const AdvReservation = ({ navigation, route }) => {
         </View>
 
         <View style={styles.formContainer}>
-          <View style={styles.inputRow}>
-            <Ionicons name="search" size={18} color="#A5A5A5" />
-            <TextInput
-              placeholder="Partida"
-              style={styles.input}
-              value={inicio}
-              onChangeText={setInicio}
-            />
-          </View>
+        <SearchLocation
+        placeholder="Buscar partida"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setInicio(location);
+        }}
+      />
 
-          <View style={styles.inputRow}>
-            <Ionicons name="search" size={18} color="#A5A5A5" />
-            <TextInput
-              placeholder="Destino"
-              style={styles.input}
-              value={llegada}
-              onChangeText={setLlegada}
-            />
-          </View>
+        <SearchLocation
+        placeholder="Buscar destino"
+        onLocationSelect={(location) => {
+          console.log('Ubicación seleccionada:', location);
+          setLlegada(location);
+          }}
+        />
 
           <View style={styles.row}>
             <View style={[styles.inputRow, styles.smallInput]}>

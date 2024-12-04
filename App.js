@@ -2,6 +2,8 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Register from './screens/register';
 import Login from './screens/login';
 import BottomTab from './components/Navigation/BottomTab';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -20,6 +22,10 @@ import ReservationRoute from './screens/rsvRoute';
 import ChooseVehicle from './screens/chooseVehicle';
 import DetailsCard from './components/ServiceDetails/DetailsCard';
 import ServiceDetails from './screens/serviceDetails';
+import SearchLocation from './components/Inputs/searchLocation';
+import MapDetails from './components/HomeMap/MapDetails';
+import RsvVehicleList from './components/ChooseVehicle/RsvVehicleCard';
+import RsvChooseVehicle from './screens/RsvchooseVehicle';
 
 export default function App() {
 
@@ -29,6 +35,7 @@ export default function App() {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Main" component={BottomTab} />
       <Stack.Screen name="Route" component={Route} />
       <Stack.Screen name="Drivers" component={DriversList} />
@@ -45,6 +52,10 @@ export default function App() {
       <Stack.Screen name="ChooseVehicle" component={ChooseVehicle} />
       <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
       <Stack.Screen name="DetailsCard" component={DetailsCard} />
+      <Stack.Screen name="SearchLocation" component={SearchLocation} />
+      <Stack.Screen name="MapDetails" component={MapDetails} />
+      <Stack.Screen name="RsvVehicleList" component={RsvVehicleList} />
+      <Stack.Screen name="RsvChooseVehicle" component={RsvChooseVehicle} />
       </Stack.Navigator>
     )
   }

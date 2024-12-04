@@ -2,20 +2,32 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
+import moment from "moment";
+import "moment-timezone";
+import "moment/locale/es";
 
 const driversData = [
   { id: '1', name: 'Pedro Lopez Alvarez', plate: 'AEZ037', vehicle: 'HYUNDAI Negro', rating: 4.5, image: require('../../assets/ConductorTemp.png') },
 ];
 
 const DetailsCard = () => {
-  const navigation = useNavigation();
-  const driver = driversData[0]; 
+  const route = useRoute();
+  const { inicio, llegada, fecha, hora } = route.params;
 
-  const origin = "Jiron Medrano Silva, 165";
-  const destination = "Jiron Medrano Silva, 165";
+  const formattedDateTime = moment
+    .tz(`${fecha} ${hora}`, "YYYY-MM-DD HH:mm:ss", "America/Lima") 
+    .locale("es") 
+    .format("dddd, MMMM D HH:mm[h] [GMT-5]");
+
+  const capitalizedDateTime =
+    formattedDateTime.charAt(0).toUpperCase() +
+    formattedDateTime.slice(1).replace(/ ([a-z])/g, (match) => match.toUpperCase());
+
+  const driver = driversData[0];
+
   const creditCard = "**** 1234";
   const price = "S/. 100";
-  const date = "Lunes, Agosto 17 20:00h GMT-5";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,11 +48,11 @@ const DetailsCard = () => {
         <Text style={styles.sectionTitle}>Ruta</Text>
         <View style={styles.routeContainer}>
           <Text style={styles.routePoint}>Origen</Text>
-          <Text style={styles.routeAddress}>{origin}</Text>
+          <Text style={styles.routeAddress}>{inicio}</Text>
         </View>
         <View style={styles.routeContainer}>
           <Text style={styles.routePoint}>Destino</Text>
-          <Text style={styles.routeAddress}>{destination}</Text>
+          <Text style={styles.routeAddress}>{llegada}</Text>
         </View>
       </View>
 
@@ -55,13 +67,11 @@ const DetailsCard = () => {
         </View>
       </View>
 
-      {/* Date Information */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Fecha</Text>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{capitalizedDateTime}</Text>
       </View>
 
-      {/* Cancel Button */}
       <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
@@ -148,6 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   paymentDetailsContainer: {
+    marginTop: 6,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -162,7 +173,6 @@ const styles = StyleSheet.create({
   },
   paymentAmount: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#333',
   },
   dateText: {
@@ -171,7 +181,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   cancelButton: {
-    marginTop: 20,
+    marginTop: 15,
     backgroundColor: '#D9534F',
     paddingVertical: 15,
     borderRadius: 10,

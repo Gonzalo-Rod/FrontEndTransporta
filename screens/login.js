@@ -92,6 +92,12 @@ export default function LoginScreen(props) {
         <Text style={styles.socialText}>Ingresa con Apple</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => props.navigation.navigate("Register")}>
+        <Text style={styles.registerText}>
+          ¿No tienes cuenta? <Text style={{ color: "#6B9AC4" }}>Regístrate</Text>
+        </Text>
+      </TouchableOpacity>
+
       <Text style={styles.footerText}>
         Al hacer clic en continuar, acepta nuestros Términos de servicio y
         Política de privacidad.
@@ -182,5 +188,11 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginBottom: 10,
+  },
+  registerText: {
+    fontSize: 14,
+    textAlign: "center",
+    color: "gray",
+    marginTop: 10,
   },
 });

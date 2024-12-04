@@ -1,7 +1,7 @@
 import React, {useMemo} from "react"
 import { View } from "react-native"
 import tw from "tailwind-react-native-classnames"
-import Map from "../components/HomeMap/Map"
+import MapDetails from "../components/HomeMap/Map"
 import Card from "../components/HomeMap/Card"
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -12,7 +12,7 @@ const HomeScreen = () => {
     return (
         <View>  
             <View style={tw`h-full`}>  
-                <Map />
+                <MapDetails />
             </View>
 
             <BottomSheet index={1} snapPoints={snapPoints}>
